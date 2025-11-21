@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-discord-all",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"description": "Complete Discord Bot integration for n8n with all features - DM, Mentions, Server Management, Roles, Advanced Tools and more",
 	"keywords": [
 		"n8n-community-node-package",
@@ -51,10 +51,8 @@
 			"dist/credentials/DiscordApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/Discord/Discord.node.js",
-			"dist/nodes/DiscordTrigger/DiscordTrigger.node.js",
 			"dist/nodes/DiscordTools/DiscordTools.node.js",
-			"dist/nodes/DiscordAdvanced/DiscordAdvanced.node.js"
+			"dist/nodes/DiscordTrigger/DiscordTrigger.node.js"
 		]
 	},
 	"devDependencies": {

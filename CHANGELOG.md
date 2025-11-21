@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2024-11-21
+
+### BREAKING CHANGES
+
+- **Removed Discord node** - All functionality moved to DiscordTools
+- **Removed DiscordAdvanced node** - All functionality moved to DiscordTools
+- Package now contains only 2 nodes: **DiscordTools** and **DiscordTrigger**
+
+### Changed
+
+- **DiscordTools** is now the single, unified AI Agent Tool for all Discord operations
+- Simplified architecture: 2 nodes instead of 4
+- Better AI agent integration with consolidated operations
+
+### Benefits
+
+- ✅ Simpler package structure
+- ✅ Single tool for AI agents to learn and use
+- ✅ All Discord operations in one place
+- ✅ Reduced confusion between similar nodes
+- ✅ Smaller package size
+
 ## [2.2.0] - 2024-11-21
 
 ### Major Changes

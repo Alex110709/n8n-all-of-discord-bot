@@ -6,45 +6,33 @@
 [![Discord](https://img.shields.io/badge/Discord-API-5865F2?logo=discord&logoColor=white)](https://discord.com/developers/docs/)
 [![n8n](https://img.shields.io/badge/n8n-Community%20Node-FF6D5A)](https://www.npmjs.com/package/n8n-nodes-discord-all)
 
-Complete Discord Bot integration for n8n with **all features** - DM, Mentions, Server Management, Roles, Advanced Tools and more!
+Complete Discord Bot integration for n8n - **Unified AI Agent Tool** 🤖
 
 ## 🚀 Features
 
-### 4 Powerful Nodes
+### 2 Powerful Nodes
 
-1. **Discord Node** - All basic Discord operations
+1. **Discord Tools** - All-in-One AI Agent Tool 🤖
 
-   - Send, edit, delete messages
-   - DM users directly
-   - Manage channels, roles, members
-   - Server administration
-   - Webhooks and invites
+   - **Messages**: Send, edit, delete, fetch, search messages
+   - **DM**: Send direct messages to users
+   - **User Info**: Get detailed user information and avatars
+   - **Channel Management**: Statistics, active users, pins, slowmode
+   - **Server Analytics**: Message heatmaps, top contributors
+   - **Moderation**: Spam detection, duplicate finder
+   - **Backup**: Export messages with full metadata
+   - **Emoji Management**: Create, delete, list custom emojis
+   - **Audit Logs**: Server audit log access
 
-2. **Discord Trigger Node** - Real-time event listening
+2. **Discord Trigger** - Real-time event listening
 
    - Message events (create, update, delete)
-   - **🆕 DM received trigger**
-   - **🆕 Bot mentioned trigger**
-   - **🆕 User mentioned trigger**
-   - **🆕 Role mentioned trigger**
+   - **DM received trigger**
+   - **Bot mentioned trigger**
+   - **User mentioned trigger**
+   - **Role mentioned trigger**
    - Reactions, members, roles, channels
    - Voice state, typing events
-
-3. **Discord Tools Node** - Advanced utilities
-
-   - Search and fetch messages in bulk
-   - Bulk delete (up to 100 messages)
-   - User info and avatars
-   - Channel statistics
-   - Server analytics and audit logs
-   - Custom emoji management
-
-4. **Discord Advanced Node** - Premium features 🔥
-   - **Analytics**: Message heatmaps, top contributors, engagement analysis
-   - **Moderation**: Spam detection, duplicate finder, link scanner
-   - **Backup**: Export messages, server structure, member lists
-   - **Automation**: Bulk role assign, mass DM, channel cloning
-   - **Insights**: Server health reports, role distribution
 
 ## 📦 Installation
 
@@ -135,46 +123,31 @@ Discord (Send Message)
 
 ## 🔧 Available Operations
 
-### Discord Node
+### Discord Tools (AI Agent Tool 🤖)
 
-- **Messages**: Send, edit, delete, pin, react
+- **Messages**: Send, edit, delete, fetch, search, get mentions, bulk delete
 - **DM**: Send direct messages to users
-- **Channels**: Create, delete, update, list
-- **Roles**: Create, delete, update, assign
-- **Members**: Get info, kick, ban, manage roles
-- **Server**: Get info, manage bans
-- **Webhooks**: Create, send messages
-- **Invites**: Create, list, manage
+- **Users**: Get detailed info, avatars, status, permissions
+- **Channels**: Get stats, active users, pins, webhooks, set slowmode
+- **Server**: Get statistics, online members, audit log, emojis
+- **Emojis**: Create, delete, list custom emojis
+- **Analytics**: Message heatmaps, top contributors
+- **Moderation**: Spam detection, duplicate message finder
+- **Backup**: Export messages with full metadata
 
-### Discord Trigger Node
+### Discord Trigger
 
 - Message Created / Deleted / Updated
-- **DM Received** 🆕
-- **Bot Mentioned** 🆕
-- **User Mentioned** 🆕
-- **Role Mentioned** 🆕
+- **DM Received**
+- **Bot Mentioned**
+- **User Mentioned**
+- **Role Mentioned**
 - Reaction Added / Removed
 - Member Joined / Left / Updated
 - Role/Channel Created / Deleted / Updated
 - Guild Ban Add / Remove
 - Voice State Update
 - Typing Start
-
-### Discord Tools Node
-
-- **Messages**: Fetch bulk, search, get mentions, bulk delete
-- **Users**: Get detailed info, avatars, status
-- **Channels**: Get stats, active users, pins, set slowmode
-- **Server**: Get statistics, online members, audit log
-- **Emojis**: Create, delete, list custom emojis
-
-### Discord Advanced Node 🔥
-
-- **Analytics**: Heatmaps, top contributors, engagement, peak hours
-- **Moderation**: Spam detection, duplicates, link scanner, mass mentions, inactive members
-- **Backup**: Export messages/structure/members, create snapshots
-- **Automation**: Bulk roles, bulk DM, clone channels
-- **Insights**: Server health, role distribution
 
 ## 🔐 Required Permissions
 
@@ -262,25 +235,31 @@ If you find this package helpful, please give it a star on GitHub!
 
 ## 📊 Version History
 
-### v2.1.0 (2024-11-21) 🔥
+### v2.3.0 (2024-11-21) 🚀
 
-- **NEW**: Discord Advanced Node with 15+ operations
-- Analytics: Heatmaps, engagement analysis, peak hours
-- Moderation: Spam detection, link scanner, inactive members
-- Backup: Full server exports and snapshots
-- Automation: Bulk operations for roles and DMs
+- **BREAKING**: Simplified to 2 nodes (DiscordTools + DiscordTrigger)
+- **DiscordTools**: Unified AI Agent Tool with all Discord operations
+- Removed Discord and DiscordAdvanced nodes (all features now in DiscordTools)
+- Complete consolidation for better AI agent integration
 
-### v2.0.0 (2024-11-21)
+### v2.2.0 (2024-11-21)
 
-- Package renamed to `n8n-nodes-discord-all`
-- Improved error handling
+- Added all Discord operations to DiscordTools
+- Message send, edit, delete operations
+- DM sending capabilities
+- Analytics, moderation, and backup features
+
+### v2.1.0 (2024-11-21)
+
+- Discord Advanced Node with 15+ operations
+- Analytics, moderation, backup features
+- DiscordTools enabled as AI Agent Tool
 
 ### v1.0.0 (2024)
 
-- Initial release with 3 nodes
+- Initial release
 - Complete Discord bot functionality
 - DM and mention triggers
-- Advanced tools for analytics and management
 
 ---
 

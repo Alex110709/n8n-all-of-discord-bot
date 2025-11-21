@@ -708,7 +708,7 @@ export class DiscordTools implements INodeType {
 				const resource = this.getNodeParameter('resource', i) as string;
 				const operation = this.getNodeParameter('operation', i) as string;
 
-				let responseData: any;
+				let responseData: any = { error: 'Operation not implemented' };
 
 				if (resource === 'message') {
 					const channelId = this.getNodeParameter('channelId', i) as string;
@@ -1338,6 +1338,13 @@ export class DiscordTools implements INodeType {
 							})),
 						};
 					}
+				}
+
+				if (!responseData) {
+					throw new NodeOperationError(
+						this.getNode(),
+						`Operation '${operation}' for resource '${resource}' is not implemented or returned no data`,
+					);
 				}
 
 				const executionData = this.helpers.constructExecutionMetaData(

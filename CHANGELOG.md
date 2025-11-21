@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.1] - 2024-11-21
+
+### Fixed
+
+- Improved error handling in DiscordTools execute method
+- Better error messages when operations are not implemented
+- Added validation to ensure responseData is set before returning
+- Fixed code formatting issues (mixed spaces and tabs)
+
 ## [2.3.0] - 2024-11-21
 
 ### BREAKING CHANGES

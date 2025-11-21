@@ -54,6 +54,11 @@ export class DiscordTools implements INodeType {
 						value: 'message',
 					},
 					{
+						name: 'DM',
+						value: 'dm',
+						description: 'Direct message operations',
+					},
+					{
 						name: 'User',
 						value: 'user',
 					},
@@ -68,6 +73,21 @@ export class DiscordTools implements INodeType {
 					{
 						name: 'Emoji',
 						value: 'emoji',
+					},
+					{
+						name: 'Analytics',
+						value: 'analytics',
+						description: 'Advanced analytics and statistics',
+					},
+					{
+						name: 'Moderation',
+						value: 'moderation',
+						description: 'Moderation and safety tools',
+					},
+					{
+						name: 'Backup',
+						value: 'backup',
+						description: 'Backup and export tools',
 					},
 				],
 				default: 'message',
@@ -85,6 +105,24 @@ export class DiscordTools implements INodeType {
 					},
 				},
 				options: [
+					{
+						name: 'Send',
+						value: 'send',
+						description: 'Send a message to a channel',
+						action: 'Send a message',
+					},
+					{
+						name: 'Edit',
+						value: 'edit',
+						description: 'Edit an existing message',
+						action: 'Edit a message',
+					},
+					{
+						name: 'Delete',
+						value: 'delete',
+						description: 'Delete a message',
+						action: 'Delete a message',
+					},
 					{
 						name: 'Fetch Messages',
 						value: 'fetchMessages',
@@ -116,7 +154,29 @@ export class DiscordTools implements INodeType {
 						action: 'Get message history',
 					},
 				],
-				default: 'fetchMessages',
+				default: 'send',
+			},
+
+			// DM Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['dm'],
+					},
+				},
+				options: [
+					{
+						name: 'Send DM',
+						value: 'sendDM',
+						description: 'Send a direct message to a user',
+						action: 'Send DM',
+					},
+				],
+				default: 'sendDM',
 			},
 
 			// User Operations
@@ -279,6 +339,84 @@ export class DiscordTools implements INodeType {
 				default: 'listEmojis',
 			},
 
+			// Analytics Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['analytics'],
+					},
+				},
+				options: [
+					{
+						name: 'Message Activity Heatmap',
+						value: 'messageHeatmap',
+						description: 'Analyze message activity by hour/day',
+						action: 'Get message heatmap',
+					},
+					{
+						name: 'Top Contributors',
+						value: 'topContributors',
+						description: 'Find most active contributors',
+						action: 'Get top contributors',
+					},
+				],
+				default: 'messageHeatmap',
+			},
+
+			// Moderation Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['moderation'],
+					},
+				},
+				options: [
+					{
+						name: 'Detect Spam Messages',
+						value: 'detectSpam',
+						description: 'Identify potential spam messages',
+						action: 'Detect spam',
+					},
+					{
+						name: 'Find Duplicate Messages',
+						value: 'findDuplicates',
+						description: 'Find duplicate/repeated messages',
+						action: 'Find duplicates',
+					},
+				],
+				default: 'detectSpam',
+			},
+
+			// Backup Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['backup'],
+					},
+				},
+				options: [
+					{
+						name: 'Export Channel Messages',
+						value: 'exportMessages',
+						description: 'Export all messages from a channel',
+						action: 'Export messages',
+					},
+				],
+				default: 'exportMessages',
+			},
+
 			// Common Fields
 			{
 				displayName: 'Guild ID',
@@ -287,7 +425,7 @@ export class DiscordTools implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						resource: ['guild', 'emoji'],
+						resource: ['guild', 'emoji', 'analytics', 'moderation', 'backup'],
 					},
 				},
 				default: '',
@@ -301,7 +439,7 @@ export class DiscordTools implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						resource: ['message', 'channel'],
+						resource: ['message', 'channel', 'analytics', 'moderation', 'backup'],
 					},
 				},
 				default: '',
@@ -315,11 +453,41 @@ export class DiscordTools implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						resource: ['user'],
+						resource: ['user', 'dm'],
 					},
 				},
 				default: '',
 				description: 'The ID of the user',
+			},
+
+			{
+				displayName: 'Message Content',
+				name: 'content',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['message', 'dm'],
+						operation: ['send', 'sendDM', 'edit'],
+					},
+				},
+				default: '',
+				description: 'The message content to send',
+			},
+
+			{
+				displayName: 'Message ID',
+				name: 'messageId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['message'],
+						operation: ['edit', 'delete'],
+					},
+				},
+				default: '',
+				description: 'The ID of the message',
 			},
 
 			// Message specific fields
@@ -550,7 +718,46 @@ export class DiscordTools implements INodeType {
 						throw new NodeOperationError(this.getNode(), 'Channel not found or not text-based');
 					}
 
-					if (operation === 'fetchMessages') {
+					if (operation === 'send') {
+						const content = this.getNodeParameter('content', i) as string;
+						const textChannel = channel as TextChannel;
+						const message = await textChannel.send(content);
+
+						responseData = {
+							id: message.id,
+							content: message.content,
+							channelId: message.channelId,
+							createdTimestamp: message.createdTimestamp,
+							author: {
+								id: message.author.id,
+								username: message.author.username,
+							},
+						};
+					} else if (operation === 'edit') {
+						const messageId = this.getNodeParameter('messageId', i) as string;
+						const content = this.getNodeParameter('content', i) as string;
+						const textChannel = channel as TextChannel;
+						const message = await textChannel.messages.fetch(messageId);
+						const edited = await message.edit(content);
+
+						responseData = {
+							id: edited.id,
+							content: edited.content,
+							channelId: edited.channelId,
+							editedTimestamp: edited.editedTimestamp,
+						};
+					} else if (operation === 'delete') {
+						const messageId = this.getNodeParameter('messageId', i) as string;
+						const textChannel = channel as TextChannel;
+						const message = await textChannel.messages.fetch(messageId);
+						await message.delete();
+
+						responseData = {
+							success: true,
+							messageId: messageId,
+							deleted: true,
+						};
+					} else if (operation === 'fetchMessages') {
 						const limit = this.getNodeParameter('limit', i, 50) as number;
 						const additionalOptions = this.getNodeParameter('additionalOptions', i, {}) as any;
 
@@ -737,6 +944,30 @@ export class DiscordTools implements INodeType {
 										})),
 								}
 								: null,
+						};
+					}
+				} else if (resource === 'dm') {
+					const userId = this.getNodeParameter('userId', i) as string;
+					const user = await client.users.fetch(userId);
+
+					if (!user) {
+						throw new NodeOperationError(this.getNode(), 'User not found');
+					}
+
+					if (operation === 'sendDM') {
+						const content = this.getNodeParameter('content', i) as string;
+						const dmChannel = await user.createDM();
+						const message = await dmChannel.send(content);
+
+						responseData = {
+							id: message.id,
+							content: message.content,
+							channelId: message.channelId,
+							createdTimestamp: message.createdTimestamp,
+							recipient: {
+								id: user.id,
+								username: user.username,
+							},
 						};
 					}
 				} else if (resource === 'channel') {
@@ -970,6 +1201,142 @@ export class DiscordTools implements INodeType {
 							managed: emoji.managed,
 							available: emoji.available,
 						}));
+					}
+				} else if (resource === 'analytics') {
+					const guildId = this.getNodeParameter('guildId', i) as string;
+					const channelId = this.getNodeParameter('channelId', i) as string;
+					const channel = await client.channels.fetch(channelId);
+
+					if (!channel || !channel.isTextBased()) {
+						throw new NodeOperationError(this.getNode(), 'Channel not found or not text-based');
+					}
+
+					if (operation === 'messageHeatmap') {
+						const messages = await channel.messages.fetch({ limit: 100 });
+						const heatmap: any = {};
+
+						messages.forEach((msg) => {
+							const hour = new Date(msg.createdTimestamp).getHours();
+							heatmap[hour] = (heatmap[hour] || 0) + 1;
+						});
+
+						responseData = {
+							channelId,
+							guildId,
+							heatmap,
+							totalMessages: messages.size,
+						};
+					} else if (operation === 'topContributors') {
+						const messages = await channel.messages.fetch({ limit: 100 });
+						const contributors: any = {};
+
+						messages.forEach((msg) => {
+							if (!msg.author.bot) {
+								const userId = msg.author.id;
+								contributors[userId] = contributors[userId] || {
+									id: userId,
+									username: msg.author.username,
+									count: 0,
+								};
+								contributors[userId].count++;
+							}
+						});
+
+						responseData = Object.values(contributors).sort((a: any, b: any) => b.count - a.count);
+					}
+				} else if (resource === 'moderation') {
+					const guildId = this.getNodeParameter('guildId', i) as string;
+					const channelId = this.getNodeParameter('channelId', i) as string;
+					const channel = await client.channels.fetch(channelId);
+
+					if (!channel || !channel.isTextBased()) {
+						throw new NodeOperationError(this.getNode(), 'Channel not found or not text-based');
+					}
+
+					if (operation === 'detectSpam') {
+						const messages = await channel.messages.fetch({ limit: 100 });
+						const spam: any[] = [];
+
+						messages.forEach((msg) => {
+							if (msg.content.length > 500 || msg.content.split('\n').length > 20) {
+								spam.push({
+									id: msg.id,
+									content: msg.content.substring(0, 100),
+									author: {
+										id: msg.author.id,
+										username: msg.author.username,
+									},
+									reason: 'Long message or many lines',
+								});
+							}
+						});
+
+						responseData = spam;
+					} else if (operation === 'findDuplicates') {
+						const messages = await channel.messages.fetch({ limit: 100 });
+						const contentMap: any = {};
+						const duplicates: any[] = [];
+
+						messages.forEach((msg) => {
+							const content = msg.content.trim();
+							if (content) {
+								if (contentMap[content]) {
+									duplicates.push({
+										id: msg.id,
+										content,
+										author: {
+											id: msg.author.id,
+											username: msg.author.username,
+										},
+										original: contentMap[content],
+									});
+								} else {
+									contentMap[content] = {
+										id: msg.id,
+										author: {
+											id: msg.author.id,
+											username: msg.author.username,
+										},
+									};
+								}
+							}
+						});
+
+						responseData = duplicates;
+					}
+				} else if (resource === 'backup') {
+					const guildId = this.getNodeParameter('guildId', i) as string;
+					const channelId = this.getNodeParameter('channelId', i) as string;
+					const channel = await client.channels.fetch(channelId);
+
+					if (!channel || !channel.isTextBased()) {
+						throw new NodeOperationError(this.getNode(), 'Channel not found or not text-based');
+					}
+
+					if (operation === 'exportMessages') {
+						const messages = await channel.messages.fetch({ limit: 100 });
+
+						responseData = {
+							channelId,
+							guildId,
+							exportedAt: new Date().toISOString(),
+							totalMessages: messages.size,
+							messages: Array.from(messages.values()).map((msg) => ({
+								id: msg.id,
+								content: msg.content,
+								author: {
+									id: msg.author.id,
+									username: msg.author.username,
+								},
+								createdTimestamp: msg.createdTimestamp,
+								createdAt: new Date(msg.createdTimestamp).toISOString(),
+								attachments: Array.from(msg.attachments.values()).map((att) => ({
+									id: att.id,
+									url: att.url,
+									name: att.name,
+								})),
+							})),
+						};
 					}
 				}
 

@@ -28,21 +28,6 @@ export class DiscordAdvanced implements INodeType {
 				required: true,
 			},
 		],
-		usableAsTool: true,
-		codex: {
-			categories: ['Communication', 'Data & Storage'],
-			subcategories: {
-				Communication: ['Messaging', 'Social Media'],
-				'Data & Storage': ['Analytics', 'Backup'],
-			},
-			resources: {
-				primaryDocumentation: [
-					{
-						url: 'https://discord.com/developers/docs/intro',
-					},
-				],
-			},
-		},
 		properties: [
 			{
 				displayName: 'Resource',

@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2024-11-21
+
+### Major Changes
+
+- **DiscordTools is now the unified AI Agent Tool** 🤖
+  - All Discord operations consolidated into DiscordTools for AI agent use
+  - Only DiscordTools has `usableAsTool: true` enabled
+
+### Added to DiscordTools
+
+**Message Operations:**
+
+- Send Message - Send messages to any channel
+- Edit Message - Edit existing messages
+- Delete Message - Delete messages
+
+**DM Operations:**
+
+- Send DM - Send direct messages to users
+
+**Analytics Operations:**
+
+- Message Activity Heatmap - Analyze message patterns by hour
+- Top Contributors - Find most active users
+
+**Moderation Operations:**
+
+- Detect Spam - Identify potential spam messages
+- Find Duplicates - Find duplicate/repeated messages
+
+**Backup Operations:**
+
+- Export Messages - Export channel messages with metadata
+
+### Summary
+
+DiscordTools now provides all essential Discord operations for AI agents:
+
+- ✅ Send messages & DMs
+- ✅ Fetch & search messages
+- ✅ User information
+- ✅ Channel management
+- ✅ Analytics & insights
+- ✅ Moderation tools
+- ✅ Data export
+
+Discord and DiscordAdvanced nodes remain for traditional n8n workflows.
+
 ## [2.1.2] - 2024-11-21
 
 ### Changed

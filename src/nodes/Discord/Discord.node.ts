@@ -28,20 +28,6 @@ export class Discord implements INodeType {
 				required: true,
 			},
 		],
-		usableAsTool: true,
-		codex: {
-			categories: ['Communication'],
-			subcategories: {
-				Communication: ['Messaging', 'Social Media'],
-			},
-			resources: {
-				primaryDocumentation: [
-					{
-						url: 'https://discord.com/developers/docs/intro',
-					},
-				],
-			},
-		},
 		properties: [
 			{
 				displayName: 'Resource',

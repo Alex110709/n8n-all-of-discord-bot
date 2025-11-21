@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2024-11-21
+
+### REVERTED - All Nodes Restored
+
+- **Restored Discord node** - All basic Discord operations available again
+- **Restored DiscordAdvanced node** - Analytics, moderation, backup features available
+- **All 4 nodes now available**: Discord, DiscordTools, DiscordAdvanced, DiscordTrigger
+
+### Tool Configuration
+
+- **DiscordTools**: AI Agent Tool (usableAsTool = true) ✅
+- **Discord**: Regular n8n node (not usable as tool)
+- **DiscordAdvanced**: Regular n8n node (not usable as tool)
+- **DiscordTrigger**: Event trigger node
+
+AI Agents should use **DiscordTools** for all operations.
+Regular workflows can use any node.
+
 ## [2.3.1] - 2024-11-21
 
 ### Fixed

@@ -6,13 +6,22 @@
 [![Discord](https://img.shields.io/badge/Discord-API-5865F2?logo=discord&logoColor=white)](https://discord.com/developers/docs/)
 [![n8n](https://img.shields.io/badge/n8n-Community%20Node-FF6D5A)](https://www.npmjs.com/package/n8n-nodes-discord-all)
 
-Complete Discord Bot integration for n8n - **Unified AI Agent Tool** 🤖
+Complete Discord Bot integration for n8n with **all features** - DM, Mentions, Server Management, Roles, Advanced Tools and more!
 
 ## 🚀 Features
 
-### 2 Powerful Nodes
+### 4 Powerful Nodes
 
-1. **Discord Tools** - All-in-One AI Agent Tool 🤖
+1. **Discord** - Basic Discord operations (Regular n8n workflows)
+
+   - Send, edit, delete messages
+   - Manage channels, roles, members
+   - Server administration
+   - Webhooks and invites
+
+2. **Discord Tools** - AI Agent Tool 🤖 (For AI agents)
+
+   - All-in-one tool for AI agent workflows
 
    - **Messages**: Send, edit, delete, fetch, search messages
    - **DM**: Send direct messages to users
@@ -24,7 +33,7 @@ Complete Discord Bot integration for n8n - **Unified AI Agent Tool** 🤖
    - **Emoji Management**: Create, delete, list custom emojis
    - **Audit Logs**: Server audit log access
 
-2. **Discord Trigger** - Real-time event listening
+3. **Discord Trigger** - Real-time event listening
 
    - Message events (create, update, delete)
    - **DM received trigger**

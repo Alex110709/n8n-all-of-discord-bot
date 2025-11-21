@@ -427,6 +427,24 @@ export class DiscordTools implements INodeType {
 					show: {
 						resource: ['guild', 'emoji', 'analytics', 'moderation', 'backup'],
 					},
+					hide: {
+						resource: ['user'],
+					},
+				},
+				default: '',
+				description: 'The ID of the Discord server (guild)',
+			},
+
+			{
+				displayName: 'Guild ID',
+				name: 'guildId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['user'],
+						operation: ['checkPermissions'],
+					},
 				},
 				default: '',
 				description: 'The ID of the Discord server (guild)',
@@ -440,6 +458,24 @@ export class DiscordTools implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['message', 'channel', 'analytics', 'moderation', 'backup'],
+					},
+					hide: {
+						resource: ['user'],
+					},
+				},
+				default: '',
+				description: 'The ID of the channel',
+			},
+
+			{
+				displayName: 'Channel ID',
+				name: 'channelId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['user'],
+						operation: ['checkPermissions'],
 					},
 				},
 				default: '',
@@ -942,6 +978,38 @@ export class DiscordTools implements INodeType {
 											details: activity.details,
 											state: activity.state,
 										})),
+								}
+								: null,
+						};
+					} else if (operation === 'checkPermissions') {
+						const guildId = this.getNodeParameter('guildId', i) as string;
+						const channelId = this.getNodeParameter('channelId', i) as string;
+						const guild = await client.guilds.fetch(guildId);
+						const member = await guild.members.fetch(userId);
+						const channel = await client.channels.fetch(channelId);
+
+						if (!channel) {
+							throw new NodeOperationError(this.getNode(), 'Channel not found');
+						}
+
+						const permissions = (channel as any).permissionsFor(member);
+
+						responseData = {
+							userId: user.id,
+							username: user.username,
+							guildId,
+							channelId,
+							permissions: permissions
+								? {
+										administrator: permissions.has('Administrator'),
+										manageChannels: permissions.has('ManageChannels'),
+										manageMessages: permissions.has('ManageMessages'),
+										sendMessages: permissions.has('SendMessages'),
+										readMessages: permissions.has('ViewChannel'),
+										embedLinks: permissions.has('EmbedLinks'),
+										attachFiles: permissions.has('AttachFiles'),
+										mentionEveryone: permissions.has('MentionEveryone'),
+										addReactions: permissions.has('AddReactions'),
 								}
 								: null,
 						};

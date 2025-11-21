@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2024-11-21
+
+### Changed
+
+- **Discord**: Enabled as AI Agent Tool with `usableAsTool: true`
+- **Discord**: Added codex metadata for AI agent integration (send message, send DM, etc.)
+- **DiscordAdvanced**: Enabled as AI Agent Tool with `usableAsTool: true`
+- **DiscordAdvanced**: Added codex metadata for analytics, moderation, and backup operations
+
+### Summary
+
+All Discord nodes (Discord, DiscordTools, DiscordAdvanced) are now usable as AI Agent Tools in n8n workflows. AI agents can now:
+
+- Send messages and DMs (Discord node)
+- Fetch messages and user info (DiscordTools node)
+- Perform analytics and moderation (DiscordAdvanced node)
+
 ## [2.1.1] - 2024-11-21
 
 ### Changed

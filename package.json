@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-discord-all",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"description": "Complete Discord Bot integration for n8n with all features - DM, Mentions, Server Management, Roles, Advanced Tools and more",
 	"keywords": [
 		"n8n-community-node-package",

@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2024-11-21
+
+### Added - Rich Media Support 🎨
+
+**DiscordTools (AI Agent Tool):**
+
+- ✅ **Embed support** - Send rich embedded messages with JSON format
+- ✅ **Binary file attachments** - Send files from n8n binary data
+- ✅ **URL file attachments** - Send files from URLs
+- ✅ Works with both `send` and `sendDM` operations
+
+**Features:**
+
+- Attachment Type selector: None, Binary Data, URL
+- Binary Property field for n8n binary data
+- File URL field for remote files
+- Custom file name support
+- Embed JSON editor with syntax highlighting
+
+**Example Embed:**
+
+```json
+{
+	"title": "Hello",
+	"description": "World",
+	"color": 3447003,
+	"fields": [{ "name": "Field", "value": "Value" }]
+}
+```
+
+AI agents can now send:
+
+- 📝 Text messages
+- 🎨 Rich embeds
+- 🖼️ Images (binary or URL)
+- 📎 Files (binary or URL)
+
 ## [2.4.0] - 2024-11-21
 
 ### REVERTED - All Nodes Restored

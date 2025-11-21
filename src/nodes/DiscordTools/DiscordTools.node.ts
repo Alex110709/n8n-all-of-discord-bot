@@ -500,7 +500,6 @@ export class DiscordTools implements INodeType {
 				displayName: 'Message Content',
 				name: 'content',
 				type: 'string',
-				required: true,
 				displayOptions: {
 					show: {
 						resource: ['message', 'dm'],
@@ -508,7 +507,100 @@ export class DiscordTools implements INodeType {
 					},
 				},
 				default: '',
-				description: 'The message content to send',
+				description: 'The message text content',
+			},
+
+			{
+				displayName: 'Embed (JSON)',
+				name: 'embedJson',
+				type: 'string',
+				typeOptions: {
+					alwaysOpenEditWindow: true,
+				},
+				displayOptions: {
+					show: {
+						resource: ['message', 'dm'],
+						operation: ['send', 'sendDM'],
+					},
+				},
+				default: '',
+				placeholder: '{"title": "Hello", "description": "World", "color": 3447003}',
+				description: 'Embed object in JSON format',
+			},
+
+			{
+				displayName: 'Attachment Type',
+				name: 'attachmentType',
+				type: 'options',
+				displayOptions: {
+					show: {
+						resource: ['message', 'dm'],
+						operation: ['send', 'sendDM'],
+					},
+				},
+				options: [
+					{
+						name: 'None',
+						value: 'none',
+					},
+					{
+						name: 'Binary Data',
+						value: 'binary',
+					},
+					{
+						name: 'URL',
+						value: 'url',
+					},
+				],
+				default: 'none',
+				description: 'Type of attachment to send',
+			},
+
+			{
+				displayName: 'Binary Property',
+				name: 'binaryProperty',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['message', 'dm'],
+						operation: ['send', 'sendDM'],
+						attachmentType: ['binary'],
+					},
+				},
+				default: 'data',
+				required: true,
+				description: 'Name of the binary property containing the file data',
+			},
+
+			{
+				displayName: 'File URL',
+				name: 'fileUrl',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['message', 'dm'],
+						operation: ['send', 'sendDM'],
+						attachmentType: ['url'],
+					},
+				},
+				default: '',
+				required: true,
+				description: 'URL of the file to attach',
+			},
+
+			{
+				displayName: 'File Name',
+				name: 'fileName',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['message', 'dm'],
+						operation: ['send', 'sendDM'],
+						attachmentType: ['binary', 'url'],
+					},
+				},
+				default: '',
+				description: 'Custom name for the attached file (optional)',
 			},
 
 			{
@@ -755,9 +847,60 @@ export class DiscordTools implements INodeType {
 					}
 
 					if (operation === 'send') {
-						const content = this.getNodeParameter('content', i) as string;
+						const content = this.getNodeParameter('content', i, '') as string;
+						const embedJson = this.getNodeParameter('embedJson', i, '') as string;
+						const attachmentType = this.getNodeParameter('attachmentType', i, 'none') as string;
 						const textChannel = channel as TextChannel;
-						const message = await textChannel.send(content);
+
+						const messageOptions: any = {};
+
+						if (content) {
+							messageOptions.content = content;
+						}
+
+						// Handle embed
+						if (embedJson) {
+							try {
+								const embedObj = JSON.parse(embedJson);
+								messageOptions.embeds = [embedObj];
+							} catch (error) {
+								throw new NodeOperationError(this.getNode(), 'Invalid embed JSON');
+							}
+						}
+
+						// Handle attachments
+						if (attachmentType === 'binary') {
+							const binaryProperty = this.getNodeParameter('binaryProperty', i) as string;
+							const fileName = this.getNodeParameter('fileName', i, '') as string;
+
+							const binaryData = items[i].binary?.[binaryProperty];
+							if (!binaryData) {
+								throw new NodeOperationError(
+									this.getNode(),
+									`No binary data property '${binaryProperty}' found`,
+								);
+							}
+
+							const buffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+							messageOptions.files = [
+								{
+									attachment: buffer,
+									name: fileName || binaryData.fileName || 'file',
+								},
+							];
+						} else if (attachmentType === 'url') {
+							const fileUrl = this.getNodeParameter('fileUrl', i) as string;
+							const fileName = this.getNodeParameter('fileName', i, '') as string;
+
+							messageOptions.files = [
+								{
+									attachment: fileUrl,
+									name: fileName || 'attachment',
+								},
+							];
+						}
+
+						const message = await textChannel.send(messageOptions);
 
 						responseData = {
 							id: message.id,
@@ -1023,9 +1166,60 @@ export class DiscordTools implements INodeType {
 					}
 
 					if (operation === 'sendDM') {
-						const content = this.getNodeParameter('content', i) as string;
+						const content = this.getNodeParameter('content', i, '') as string;
+						const embedJson = this.getNodeParameter('embedJson', i, '') as string;
+						const attachmentType = this.getNodeParameter('attachmentType', i, 'none') as string;
 						const dmChannel = await user.createDM();
-						const message = await dmChannel.send(content);
+
+						const messageOptions: any = {};
+
+						if (content) {
+							messageOptions.content = content;
+						}
+
+						// Handle embed
+						if (embedJson) {
+							try {
+								const embedObj = JSON.parse(embedJson);
+								messageOptions.embeds = [embedObj];
+							} catch (error) {
+								throw new NodeOperationError(this.getNode(), 'Invalid embed JSON');
+							}
+						}
+
+						// Handle attachments
+						if (attachmentType === 'binary') {
+							const binaryProperty = this.getNodeParameter('binaryProperty', i) as string;
+							const fileName = this.getNodeParameter('fileName', i, '') as string;
+
+							const binaryData = items[i].binary?.[binaryProperty];
+							if (!binaryData) {
+								throw new NodeOperationError(
+									this.getNode(),
+									`No binary data property '${binaryProperty}' found`,
+								);
+							}
+
+							const buffer = await this.helpers.getBinaryDataBuffer(i, binaryProperty);
+							messageOptions.files = [
+								{
+									attachment: buffer,
+									name: fileName || binaryData.fileName || 'file',
+								},
+							];
+						} else if (attachmentType === 'url') {
+							const fileUrl = this.getNodeParameter('fileUrl', i) as string;
+							const fileName = this.getNodeParameter('fileName', i, '') as string;
+
+							messageOptions.files = [
+								{
+									attachment: fileUrl,
+									name: fileName || 'attachment',
+								},
+							];
+						}
+
+						const message = await dmChannel.send(messageOptions);
 
 						responseData = {
 							id: message.id,

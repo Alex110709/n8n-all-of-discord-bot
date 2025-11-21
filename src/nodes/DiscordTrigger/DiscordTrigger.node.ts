@@ -247,18 +247,24 @@ export class DiscordTrigger implements INodeType {
 
 		const event = this.getNodeParameter('event') as string;
 		const filters = this.getNodeParameter('filters', {}) as IDataObject;
-		
+
 		let mentionUserIds: string[] = [];
 		let mentionRoleIds: string[] = [];
-		
+
 		if (event === 'userMentioned') {
 			const userIdsParam = this.getNodeParameter('mentionUserIds', '') as string;
-			mentionUserIds = userIdsParam.split(',').map(id => id.trim()).filter(id => id);
+			mentionUserIds = userIdsParam
+				.split(',')
+				.map((id) => id.trim())
+				.filter((id) => id);
 		}
-		
+
 		if (event === 'roleMentioned') {
 			const roleIdsParam = this.getNodeParameter('mentionRoleIds', '') as string;
-			mentionRoleIds = roleIdsParam.split(',').map(id => id.trim()).filter(id => id);
+			mentionRoleIds = roleIdsParam
+				.split(',')
+				.map((id) => id.trim())
+				.filter((id) => id);
 		}
 
 		const client = new Client({
@@ -326,14 +332,14 @@ export class DiscordTrigger implements INodeType {
 					return false;
 				}
 			}
-			
+
 			// DM specific filters
 			if (filters.dmOnlyFromUsers && data.isDM) {
 				const allowedUsers = (filters.dmOnlyFromUsers as string)
 					.split(',')
-					.map(id => id.trim())
-					.filter(id => id);
-				
+					.map((id) => id.trim())
+					.filter((id) => id);
+
 				if (allowedUsers.length > 0 && !allowedUsers.includes(data.userId)) {
 					return false;
 				}
@@ -380,7 +386,7 @@ export class DiscordTrigger implements INodeType {
 			client.on(Events.MessageCreate, (message) => {
 				// Only trigger for DMs (no guild)
 				if (message.guildId) return;
-				
+
 				const data = {
 					id: message.id,
 					content: message.content,
@@ -410,7 +416,7 @@ export class DiscordTrigger implements INodeType {
 			client.on(Events.MessageCreate, (message) => {
 				// Check if bot is mentioned
 				if (!message.mentions.users.has(client.user?.id || '')) return;
-				
+
 				const data = {
 					id: message.id,
 					content: message.content,
@@ -438,12 +444,10 @@ export class DiscordTrigger implements INodeType {
 			client.on(Events.MessageCreate, (message) => {
 				// Check if any of the specified users are mentioned
 				const mentionedUserIds = Array.from(message.mentions.users.keys());
-				const hasMentionedUser = mentionUserIds.some(userId => 
-					mentionedUserIds.includes(userId)
-				);
-				
+				const hasMentionedUser = mentionUserIds.some((userId) => mentionedUserIds.includes(userId));
+
 				if (!hasMentionedUser) return;
-				
+
 				const data = {
 					id: message.id,
 					content: message.content,
@@ -460,8 +464,8 @@ export class DiscordTrigger implements INodeType {
 						username: user.username,
 					})),
 					targetMentionedUsers: message.mentions.users
-						.filter(user => mentionUserIds.includes(user.id))
-						.map(user => ({
+						.filter((user) => mentionUserIds.includes(user.id))
+						.map((user) => ({
 							id: user.id,
 							username: user.username,
 						})),
@@ -480,12 +484,10 @@ export class DiscordTrigger implements INodeType {
 			client.on(Events.MessageCreate, (message) => {
 				// Check if any of the specified roles are mentioned
 				const mentionedRoleIds = Array.from(message.mentions.roles.keys());
-				const hasMentionedRole = mentionRoleIds.some(roleId => 
-					mentionedRoleIds.includes(roleId)
-				);
-				
+				const hasMentionedRole = mentionRoleIds.some((roleId) => mentionedRoleIds.includes(roleId));
+
 				if (!hasMentionedRole) return;
-				
+
 				const data = {
 					id: message.id,
 					content: message.content,
@@ -502,8 +504,8 @@ export class DiscordTrigger implements INodeType {
 						name: role.name,
 					})),
 					targetMentionedRoles: message.mentions.roles
-						.filter(role => mentionRoleIds.includes(role.id))
-						.map(role => ({
+						.filter((role) => mentionRoleIds.includes(role.id))
+						.map((role) => ({
 							id: role.id,
 							name: role.name,
 						})),

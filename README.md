@@ -1,15 +1,19 @@
 # n8n-nodes-discord-all
 
-[![npm version](https://badge.fury.io/js/n8n-nodes-discord-all.svg)](https://badge.fury.io/js/n8n-nodes-discord-all)
+[![npm version](https://badge.fury.io/js/n8n-nodes-discord-all.svg)](https://www.npmjs.com/package/n8n-nodes-discord-all)
+[![npm downloads](https://img.shields.io/npm/dm/n8n-nodes-discord-all.svg)](https://www.npmjs.com/package/n8n-nodes-discord-all)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Discord](https://img.shields.io/badge/Discord-API-5865F2?logo=discord&logoColor=white)](https://discord.com/developers/docs/)
+[![n8n](https://img.shields.io/badge/n8n-Community%20Node-FF6D5A)](https://www.npmjs.com/package/n8n-nodes-discord-all)
 
 Complete Discord Bot integration for n8n with **all features** - DM, Mentions, Server Management, Roles, Advanced Tools and more!
 
 ## 🚀 Features
 
-### 3 Powerful Nodes
+### 4 Powerful Nodes
 
 1. **Discord Node** - All basic Discord operations
+
    - Send, edit, delete messages
    - DM users directly
    - Manage channels, roles, members
@@ -17,6 +21,7 @@ Complete Discord Bot integration for n8n with **all features** - DM, Mentions, S
    - Webhooks and invites
 
 2. **Discord Trigger Node** - Real-time event listening
+
    - Message events (create, update, delete)
    - **🆕 DM received trigger**
    - **🆕 Bot mentioned trigger**
@@ -26,12 +31,20 @@ Complete Discord Bot integration for n8n with **all features** - DM, Mentions, S
    - Voice state, typing events
 
 3. **Discord Tools Node** - Advanced utilities
+
    - Search and fetch messages in bulk
    - Bulk delete (up to 100 messages)
    - User info and avatars
    - Channel statistics
    - Server analytics and audit logs
    - Custom emoji management
+
+4. **Discord Advanced Node** - Premium features 🔥
+   - **Analytics**: Message heatmaps, top contributors, engagement analysis
+   - **Moderation**: Spam detection, duplicate finder, link scanner
+   - **Backup**: Export messages, server structure, member lists
+   - **Automation**: Bulk role assign, mass DM, channel cloning
+   - **Insights**: Server health reports, role distribution
 
 ## 📦 Installation
 
@@ -109,6 +122,7 @@ Discord (Send Message)
 - [22 Practical Examples](./docs/EXAMPLES.md)
 - [DM & Mentions Guide](./docs/DM_MENTIONS_GUIDE.md) - 12 examples
 - [Discord Tools Guide](./docs/TOOLS_GUIDE.md) - Advanced utilities
+- [Discord Advanced Guide](./docs/ADVANCED_GUIDE.md) - Analytics, moderation, backups 🔥
 
 ## 🎨 Use Cases
 
@@ -154,9 +168,18 @@ Discord (Send Message)
 - **Server**: Get statistics, online members, audit log
 - **Emojis**: Create, delete, list custom emojis
 
+### Discord Advanced Node 🔥
+
+- **Analytics**: Heatmaps, top contributors, engagement, peak hours
+- **Moderation**: Spam detection, duplicates, link scanner, mass mentions, inactive members
+- **Backup**: Export messages/structure/members, create snapshots
+- **Automation**: Bulk roles, bulk DM, clone channels
+- **Insights**: Server health, role distribution
+
 ## 🔐 Required Permissions
 
 ### Bot Permissions
+
 - Read Messages / View Channels
 - Send Messages
 - Manage Messages (for deletion)
@@ -166,6 +189,7 @@ Discord (Send Message)
 - Read Message History
 
 ### Gateway Intents (Developer Portal)
+
 - ✅ Message Content Intent (required)
 - ✅ Server Members Intent (required)
 - Presence Intent (optional, for status)
@@ -238,12 +262,25 @@ If you find this package helpful, please give it a star on GitHub!
 
 ## 📊 Version History
 
+### v2.1.0 (2024-11-21) 🔥
+
+- **NEW**: Discord Advanced Node with 15+ operations
+- Analytics: Heatmaps, engagement analysis, peak hours
+- Moderation: Spam detection, link scanner, inactive members
+- Backup: Full server exports and snapshots
+- Automation: Bulk operations for roles and DMs
+
+### v2.0.0 (2024-11-21)
+
+- Package renamed to `n8n-nodes-discord-all`
+- Improved error handling
+
 ### v1.0.0 (2024)
-- Initial release
+
+- Initial release with 3 nodes
 - Complete Discord bot functionality
 - DM and mention triggers
 - Advanced tools for analytics and management
-- Comprehensive documentation
 
 ---
 

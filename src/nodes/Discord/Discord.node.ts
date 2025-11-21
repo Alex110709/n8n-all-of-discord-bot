@@ -854,7 +854,7 @@ export class Discord implements INodeType {
 					} else if (operation === 'delete') {
 						const channelId = this.getNodeParameter('channelId', i) as string;
 						const channel = await guild.channels.fetch(channelId);
-						
+
 						if (!channel) {
 							throw new NodeOperationError(this.getNode(), 'Channel not found');
 						}
@@ -1028,7 +1028,7 @@ export class Discord implements INodeType {
 
 					const user = await client.users.fetch(userId);
 					const dmChannel = await user.createDM();
-					const message = await dmChannel.send(content) as any;
+					const message = (await dmChannel.send(content)) as any;
 
 					responseData = {
 						id: message.id,

@@ -28,6 +28,20 @@ export class DiscordTools implements INodeType {
 				required: true,
 			},
 		],
+		usableAsTool: true,
+		codex: {
+			categories: ['Communication'],
+			subcategories: {
+				Communication: ['Messaging', 'Social Media'],
+			},
+			resources: {
+				primaryDocumentation: [
+					{
+						url: 'https://discord.com/developers/docs/intro',
+					},
+				],
+			},
+		},
 		properties: [
 			{
 				displayName: 'Resource',
@@ -580,8 +594,12 @@ export class DiscordTools implements INodeType {
 						const filtered = Array.from(messages.values()).filter((msg) => {
 							if (!additionalOptions.includeBots && msg.author.bot) return false;
 
-							const content = additionalOptions.caseSensitive ? msg.content : msg.content.toLowerCase();
-							const search = additionalOptions.caseSensitive ? searchText : searchText.toLowerCase();
+							const content = additionalOptions.caseSensitive
+								? msg.content
+								: msg.content.toLowerCase();
+							const search = additionalOptions.caseSensitive
+								? searchText
+								: searchText.toLowerCase();
 
 							if (additionalOptions.exactMatch) {
 								return content === search;
@@ -650,7 +668,7 @@ export class DiscordTools implements INodeType {
 						const messages = await channel.messages.fetch({ limit: Math.min(limit, 100) });
 
 						const history = Array.from(messages.values())
-							.filter(msg => additionalOptions.includeBots || !msg.author.bot)
+							.filter((msg) => additionalOptions.includeBots || !msg.author.bot)
 							.map((msg) => ({
 								id: msg.id,
 								content: msg.content,
@@ -717,7 +735,7 @@ export class DiscordTools implements INodeType {
 											details: activity.details,
 											state: activity.state,
 										})),
-									}
+								}
 								: null,
 						};
 					}
@@ -791,7 +809,7 @@ export class DiscordTools implements INodeType {
 								? {
 										id: webhook.owner.id,
 										username: webhook.owner.username,
-									}
+								}
 								: null,
 							token: webhook.token,
 							url: webhook.url,
@@ -886,7 +904,7 @@ export class DiscordTools implements INodeType {
 								? {
 										id: entry.executor.id,
 										username: entry.executor.username,
-									}
+								}
 								: null,
 							reason: entry.reason,
 							createdTimestamp: entry.createdTimestamp,

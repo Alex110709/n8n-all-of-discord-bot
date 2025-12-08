@@ -745,6 +745,7 @@ export class DiscordTrigger implements INodeType {
 				const data = {
 					interactionId: interaction.id,
 					interactionType: interaction.type,
+					interactionCommandName: interaction.commandName,
 					userId: interaction.user.id,
 					username: interaction.user.username,
 					guildId: interaction.guildId,

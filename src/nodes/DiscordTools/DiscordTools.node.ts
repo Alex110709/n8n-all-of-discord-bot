@@ -89,6 +89,11 @@ export class DiscordTools implements INodeType {
 						value: 'backup',
 						description: 'Backup and export tools',
 					},
+					{
+						name: 'Server Management',
+						value: 'serverManagement',
+						description: 'Server management - create categories, channels, roles',
+					},
 				],
 				default: 'message',
 			},
@@ -417,6 +422,46 @@ export class DiscordTools implements INodeType {
 				default: 'exportMessages',
 			},
 
+			// Server Management Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['serverManagement'],
+					},
+				},
+				options: [
+					{
+						name: 'List Guilds',
+						value: 'listGuilds',
+						description: 'List all guilds bot is in',
+						action: 'List guilds',
+					},
+					{
+						name: 'Create Category',
+						value: 'createCategory',
+						description: 'Create a category channel',
+						action: 'Create category',
+					},
+					{
+						name: 'Create Channel',
+						value: 'createChannel',
+						description: 'Create a text or voice channel',
+						action: 'Create channel',
+					},
+					{
+						name: 'Create Role',
+						value: 'createRole',
+						description: 'Create a role',
+						action: 'Create role',
+					},
+				],
+				default: 'listGuilds',
+			},
+
 			// Common Fields
 			{
 				displayName: 'Guild ID',
@@ -425,7 +470,7 @@ export class DiscordTools implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						resource: ['guild', 'emoji', 'analytics', 'moderation', 'backup'],
+						resource: ['guild', 'emoji', 'analytics', 'moderation', 'backup', 'serverManagement'],
 					},
 					hide: {
 						resource: ['user'],
@@ -433,6 +478,64 @@ export class DiscordTools implements INodeType {
 				},
 				default: '',
 				description: 'The ID of the Discord server (guild)',
+			},
+
+			{
+				displayName: 'Channel Name',
+				name: 'channelName',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['serverManagement'],
+						operation: ['createChannel', 'createCategory'],
+					},
+				},
+				default: '',
+				description: 'Name of the channel to create',
+			},
+
+			{
+				displayName: 'Channel Type',
+				name: 'channelType',
+				type: 'options',
+				displayOptions: {
+					show: {
+						resource: ['serverManagement'],
+						operation: ['createChannel'],
+					},
+				},
+				options: [
+					{
+						name: 'Text',
+						value: 'text',
+					},
+					{
+						name: 'Voice',
+						value: 'voice',
+					},
+					{
+						name: 'Category',
+						value: 'category',
+					},
+				],
+				default: 'text',
+				description: 'Type of channel to create',
+			},
+
+			{
+				displayName: 'Role Name',
+				name: 'roleName',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['serverManagement'],
+						operation: ['createRole'],
+					},
+				},
+				default: '',
+				description: 'Name of the role to create',
 			},
 
 			{
@@ -1121,7 +1224,7 @@ export class DiscordTools implements INodeType {
 											details: activity.details,
 											state: activity.state,
 										})),
-								}
+								  }
 								: null,
 						};
 					} else if (operation === 'checkPermissions') {
@@ -1153,7 +1256,7 @@ export class DiscordTools implements INodeType {
 										attachFiles: permissions.has('AttachFiles'),
 										mentionEveryone: permissions.has('MentionEveryone'),
 										addReactions: permissions.has('AddReactions'),
-								}
+								  }
 								: null,
 						};
 					}
@@ -1302,7 +1405,7 @@ export class DiscordTools implements INodeType {
 								? {
 										id: webhook.owner.id,
 										username: webhook.owner.username,
-								}
+								  }
 								: null,
 							token: webhook.token,
 							url: webhook.url,
@@ -1397,7 +1500,7 @@ export class DiscordTools implements INodeType {
 								? {
 										id: entry.executor.id,
 										username: entry.executor.username,
-								}
+								  }
 								: null,
 							reason: entry.reason,
 							createdTimestamp: entry.createdTimestamp,
@@ -1599,6 +1702,64 @@ export class DiscordTools implements INodeType {
 								})),
 							})),
 						};
+					}
+				} else if (resource === 'serverManagement') {
+					if (operation === 'listGuilds') {
+						const guilds = await client.guilds.fetch();
+
+						responseData = Array.from(guilds.values()).map((guild) => ({
+							id: guild.id,
+							name: guild.name,
+							icon: guild.icon,
+						}));
+					} else {
+						const guildId = this.getNodeParameter('guildId', i) as string;
+						const guild = await client.guilds.fetch(guildId);
+
+						if (operation === 'createCategory') {
+							const categoryName = this.getNodeParameter('channelName', i) as string;
+
+							const category = await guild.channels.create({
+								name: categoryName,
+								type: ChannelType.GuildCategory,
+							});
+
+							responseData = {
+								id: category.id,
+								name: category.name,
+								type: category.type,
+							};
+						} else if (operation === 'createChannel') {
+							const channelName = this.getNodeParameter('channelName', i) as string;
+							const channelType = this.getNodeParameter('channelType', i) as string;
+
+							const channelTypeMap: any = {
+								text: ChannelType.GuildText,
+								voice: ChannelType.GuildVoice,
+							};
+
+							const channel = await guild.channels.create({
+								name: channelName,
+								type: channelTypeMap[channelType],
+							});
+
+							responseData = {
+								id: channel.id,
+								name: channel.name,
+								type: channel.type,
+							};
+						} else if (operation === 'createRole') {
+							const roleName = this.getNodeParameter('roleName', i) as string;
+
+							const role = await guild.roles.create({ name: roleName });
+
+							responseData = {
+								id: role.id,
+								name: role.name,
+								color: role.color,
+								position: role.position,
+							};
+						}
 					}
 				}
 

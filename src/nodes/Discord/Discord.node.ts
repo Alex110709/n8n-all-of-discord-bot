@@ -188,6 +188,12 @@ export class Discord implements INodeType {
 				},
 				options: [
 					{
+						name: 'List',
+						value: 'list',
+						description: 'List all guilds bot is in',
+						action: 'List guilds',
+					},
+					{
 						name: 'Get',
 						value: 'get',
 						description: 'Get guild information',
